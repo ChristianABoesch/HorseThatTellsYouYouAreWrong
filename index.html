@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horse that tells you you're wrong</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(45deg, red, orange, yellow, green);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+        @keyframes gradientBG {
+            0% {background-position: 0% 50%;}
+            50% {background-position: 100% 50%;}
+            100% {background-position: 0% 50%;}
+        }
+        .container {
+            text-align: center;
+        }
+        h1 {
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            margin-bottom: 20px;
+        }
+        #mediaContainer {
+            max-width: 80%;
+            margin: 0 auto;
+        }
+        #horseImage, #horseVideo {
+            width: 100%;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            cursor: pointer;
+        }
+        #horseVideo {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>The horse that tells you you're wrong</h1>
+        <div id="mediaContainer">
+            <img src="images/honse.jpeg" alt="Horse 1" id="horseImage">
+            <video id="horseVideo" loop muted>
+                <source src="images/honse.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <p>Let's have some fun.</p>
+    </div>
+
+    <script>
+        const audioFiles = [
+            'audio/MMM_Draft1_SB1.wav',
+            'audio/MMM_Draft1_SB2.wav',
+            'audio/MMM_Draft1_SB3.wav',
+            'audio/MMM_Draft1_SB4.wav',
+            'audio/MMM_Draft1_SB5.wav',
+            'audio/MMM_Draft1_SB6.wav',
+            'audio/MMM_Draft1_SB7.wav',
+            'audio/MMM_Draft1_SB8.wav',
+            'audio/MMM_Draft1_SB9.wav'
+        ];
+
+        const horseImage = document.getElementById('horseImage');
+        const horseVideo = document.getElementById('horseVideo');
+        let audio = new Audio();
+
+        function switchToVideo() {
+            horseImage.style.display = 'none';
+            horseVideo.style.display = 'block';
+            horseVideo.play();
+        }
+
+        function switchToImage() {
+            horseVideo.style.display = 'none';
+            horseImage.style.display = 'block';
+            horseVideo.pause();
+            horseVideo.currentTime = 0;
+        }
+
+        horseImage.addEventListener('click', function() {
+            // Stop any currently playing audio
+            audio.pause();
+            audio.currentTime = 0;
+
+            // Switch to video
+            switchToVideo();
+
+            // Select a random audio file
+            const randomAudio = audioFiles[Math.floor(Math.random() * audioFiles.length)];
+            
+            // Set the new audio source and play
+            audio = new Audio(randomAudio);
+            audio.play();
+
+            // When audio ends, switch back to image
+            audio.onended = switchToImage;
+        });
+
+        horseVideo.addEventListener('click', function() {
+            // If video is clicked, treat it the same as clicking the image
+            audio.pause();
+            audio.currentTime = 0;
+
+            const randomAudio = audioFiles[Math.floor(Math.random() * audioFiles.length)];
+            audio = new Audio(randomAudio);
+            audio.play();
+
+            audio.onended = switchToImage;
+        });
+    </script>
+</body>
+</html>
